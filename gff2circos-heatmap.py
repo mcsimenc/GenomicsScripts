@@ -4,7 +4,7 @@ import sys
 
 
 def help():
-    print('''
+    print("""
     Usage:
     ------------
     gff2circos-heatmap.py -gff <path> -scafLens <path> -window <int> 
@@ -18,7 +18,11 @@ def help():
     file from which sequence lengths will be obtained. The -window 
     parameter sets the number of bases in the sliding window used to 
     determine the density of features and corresponding colors in
-    Circos.
+    Circos. Different GFF3 features types are not distinguished from
+    each other; therefore the input GFF3 file should contain only one
+    type of feature (e.g. genes of interest). Overlapping features are
+    merged and feature strand is not taken into account. Features are
+    all treated as if they are on a single strand.
 
 
     Required parameters:
@@ -41,15 +45,14 @@ def help():
     ------------
     scaf    start    stop    density
 
-''', file=sys.stderr)
-
+""", file=sys.stderr)
 
 
 def parseLenFile(filepath):
-    '''Parses two-column input file returns dict with first column item 
+    """Parses two-column input file returns dict with first column item 
     as key and second column item as value. Keys are expected to be
     unique.
-    '''
+    """
     lenDct = {}
     with open(filepath) as fl:
         for line in fl:
@@ -59,7 +62,7 @@ def parseLenFile(filepath):
     return lenDct
 
 def fasta2LenDct(filepath, scafList=None):
-    '''
+    """
     Calculates the lengths of seqs in fasta format file provided with 
     -fasta and returns a dictionary with seq headers as keys and 
     lengths as values. Doesn't do any checks that the FASTA file is
@@ -70,7 +73,7 @@ def fasta2LenDct(filepath, scafList=None):
     ----------
     filepath: path to a FASTA file
     scafList: optional list of scaffolds to restrict output to
-    '''
+    """
     # initialize variables
     lenDct = {}
     header = None
@@ -110,7 +113,7 @@ def fasta2LenDct(filepath, scafList=None):
             
 
 def gff2circosHeatmap(filepath, scafLens, windowLen, scafList=None):
-    """1. Reads scaf, start, and start for features in gff3 file into 
+    """1. Reads scaf, start, and start for features in GFF3 file into 
        memory
     2. Creates all windows for a given scaf
     3. Loops through the features and adds them to whatever scaf they
@@ -130,75 +133,90 @@ def gff2circosHeatmap(filepath, scafLens, windowLen, scafList=None):
         return coord//windowLen
 
     def genWindowCoords(n, windowLen):
-        return (n*windowLen, (n+1)*windowLen-1)
+        """Takes the window number n and the length of the window as
+        arguments and returns a 2-element tuple of the start and end
+        coordinates of that window.
+        """
+        return (n * windowLen, (n + 1) * windowLen - 1)
 
-    def mergeCoords(A,B):
-        '''
-        takes two tuples and outputs two tuples, which will be identical if the original overlap otherwise will be the originals
+    def mergeCoords(A, B):
+        """Takes two tuples of coordinates A and B as arguments; A must
+        have a start coordinate before or equal to the start coordinate
+        of B. If they do not overlap then A and B are returned as input
+        and if they overlap the minimum and maximum values are returned.
 
         let A = (a1, a2), B = (b1, b2) | a1<=b1, a1<=a2, b1<=b2
 
-        case 1: a2<=b1 ---> output originals
+        case 1: a2<=b1 ---> output A and B
 
         case 2: b1<a2 && b2>a2 ---> output (a1, b2)
 
         case 3: b2<=a2 ---> output A
-        '''
+        """
 
-        assert min(A) <= min(B), "tupes given to mergeCoords in wrong order: A={0}, B={1}".format(A,B)
-
+        assert min(A) <= min(B), ("tuples given to mergeCoords in wrong order: "
+                                    "A={0}, B={1}").format(A,B)
         if min(B) >= max(A):
-            return ((A,B), 0)
+            return ((A, B), 0)
         elif min(B) < max(A) and max(B) > max(A):
             output = (min(A),max(B))
             return ((output, output), 1)
         elif max(B) <= max(A):
-            return ((A,A), 2)
+            return ((A, A), 2)
         else:
-            raise Exception("Unexpected result from mergeCoords(A,B) using A={0}, B={1}".format(A,B))
+            raise Exception(("Unexpected result from mergeCoords(A,B) using "
+                               " A={0}, B={1}").format(A,B))
 
-
+    # open gff file and read it line by line, adding start and end
+    # coordinates for each feature to the scaffold on which it resides.
     with open(filepath) as fl:
         gffFeats = {}
-        for line in fl: # read in gff
+        for line in fl:
+            # skip commented lines
             if not line.startswith('#'):
                 contents = line.strip().split('\t')
                 scaf = contents[0]
-                start = int(contents[3])-1
-                end = int(contents[4])-1
+                start = int(contents[3]) - 1
+                end = int(contents[4]) - 1
                 if scaf in gffFeats:
                     gffFeats[scaf].append((start, end))
                 else:
                     gffFeats[scaf] = [(start, end)]
-
-        for scaf in gffFeats: # sort features by length then merge overlapping features
+        # for each scaffold, sort features by length then merge
+        # all overlapping adjacent features
+        for scaf in gffFeats:
             gffFeats[scaf] = sorted(gffFeats[scaf], key=lambda x:x[0])
             newScafFeats = []
             currentFeat = gffFeats[scaf][0]
-            i=0
-            while i< len(gffFeats[scaf])-1:
-                mergeResult = mergeCoords(currentFeat, gffFeats[scaf][i+1])
-                if mergeResult[1] == 0: # feats do not overlap
+            i = 0
+            while i < len(gffFeats[scaf]) - 1:
+                mergeResult = mergeCoords(currentFeat, gffFeats[scaf][i + 1])
+                # adjacent features do not overlap: save the first as
+                # a feature in the processed merged set and set the
+                # second as the next feature to check for overlaps
+                if mergeResult[1] == 0:
                     newScafFeats.append(mergeResult[0][0])
                     currentFeat = mergeResult[0][1]
-                elif mergeResult[1] == 1: # feats overlap case 1
+                # features overlap: merge them and continue to check
+                # if they overlap with the next adjacent feature
+                elif mergeResult[1] == 1:
                     currentFeat = mergeResult[0][0]
-                elif mergeResult[1] == 2: # feats overlap case 2
+                elif mergeResult[1] == 2:
                     currentFeat = mergeResult[0][0]
                 else:
                     raise Exception("Unexpected result from mergeResult block")
                 i += 1
-
             newScafFeats.append(currentFeat)
             gffFeats[scaf] = newScafFeats
-
+        # if a scaffold list to restrict output to hasn't been provided
+        # then set the scaffolds to output as the scaffolds with
+        # features
         if scafList == None:
             scafList = sorted(list(gffFeats.keys()))
-
         for scaf in scafList:
-
             windows = {}
-            windowFeatLens = {} # for cumulative length of all features in window
+            # for cumulative length of all features in window
+            windowFeatLens = {}
             lastWindowEnd = 0
             currentWindow = 0
             while lastWindowEnd < scafLens[scaf]-windowLen+1: # generate windows for each scaf
