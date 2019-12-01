@@ -12,9 +12,10 @@ def help():
 
     Description:
     ------------
-    Takes two files as input, a GFF3 file and a two-column 
+    Takes two files as input, a GFF3 file and either (1) a two-column 
     tab-delimited file where the first column contains scaffold names 
-    and the second column contains scaffold lengths. The -window 
+    and the second column contains scaffold lengths, or (2) a FASTA
+    file from which sequence lengths will be obtained. The -window 
     parameter sets the number of bases in the sliding window used to 
     determine the density of features and corresponding colors in
     Circos.
@@ -64,6 +65,11 @@ def fasta2LenDct(filepath, scafList=None):
     lengths as values. Doesn't do any checks that the FASTA file is
     the correct format. Whitespace in sequence headers will not work
     in Circos.
+
+    Arguments:
+    ----------
+    filepath: path to a FASTA file
+    scafList: optional list of scaffolds to restrict output to
     '''
     # initialize variables
     lenDct = {}
@@ -104,18 +110,23 @@ def fasta2LenDct(filepath, scafList=None):
             
 
 def gff2circosHeatmap(filepath, scafLens, windowLen, scafList=None):
-    '''
-    filepath = path to gff3 file
-    scafLens = dictionary with lengths of
-    seqs in gff3 file.
-    How it works:
-    1.reads scaf, start, and start for 
-    features in gff3 file into memory
-    2.creates all windows for a given scaf
-    3.loops through the features and adds
-    them to whatever scaf they are part of
-    '''
+    """1. Reads scaf, start, and start for features in gff3 file into 
+       memory
+    2. Creates all windows for a given scaf
+    3. Loops through the features and adds them to whatever scaf they
+       are part of
+
+    Arguments:
+    ----------
+    filepath: Path to a GFF3 file
+    scafLens: Dictionary with lengths of sequences represented in the
+              GFF3 file
+    """
+
     def whichWindow(coord, windowLen):
+        """Takes a coordinate and the length of the window as arguments
+        and returns the window number.
+        """
         return coord//windowLen
 
     def genWindowCoords(n, windowLen):
