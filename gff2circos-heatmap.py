@@ -7,8 +7,8 @@ def help():
     print("""
     Usage:
     ------------
-    gff2circos-heatmap.py -gff <path> -scafLens <path> -window <int> 
-        [-scafList <path>]
+    gff2circos-heatmap.py -gff <path> -window <int> 
+        [<path> -scafLens | -fasta <path>] [-scafList <path>]
 
     Description:
     ------------
@@ -213,76 +213,108 @@ def gff2circosHeatmap(filepath, scafLens, windowLen, scafList=None):
         # features
         if scafList == None:
             scafList = sorted(list(gffFeats.keys()))
+        # for each scaffold create a set of windows, the last of which will be
+        # the length from the end of the second to last window to the end of
+        # the scaffold
         for scaf in scafList:
             windows = {}
             # for cumulative length of all features in window
             windowFeatLens = {}
             lastWindowEnd = 0
             currentWindow = 0
-            while lastWindowEnd < scafLens[scaf]-windowLen+1: # generate windows for each scaf
+            # generate windows for each scaffold
+            while lastWindowEnd < scafLens[scaf] - windowLen + 1:
                 windows[currentWindow] = genWindowCoords(currentWindow, windowLen)
                 windowFeatLens[currentWindow] = 0
                 lastWindowEnd = windows[currentWindow][1]
                 currentWindow += 1
-
-            assert lastWindowEnd <= scafLens[scaf], "During window generation window extends beyond length of scaffold. You caught a bug"
-            if lastWindowEnd < scafLens[scaf]: # add the last window, which may be a different length
-                windows[currentWindow] = (lastWindowEnd+1, scafLens[scaf])
+            assert lastWindowEnd <= scafLens[scaf], ("During window generation "
+                                  "window extends beyond length of scaffold.")
+            # generate the window for the last scaffold (may be shorter than
+            # the window size)
+            if lastWindowEnd < scafLens[scaf]:
+                windows[currentWindow] = (lastWindowEnd + 1, scafLens[scaf])
                 windowFeatLens[currentWindow] = 0
+            # calculate proportion of window occupied by any feature by summing
+            # the lengths of the each feature. This is output as the density
+            # 4th column in the Circos heatmap file
             if scaf in gffFeats:
-                for feature in gffFeats[scaf]: # calculate proportion of window occupied by any feature
+                for feature in gffFeats[scaf]:
                     startWindow = whichWindow(feature[0], windowLen)
                     endWindow = whichWindow(feature[1], windowLen)
                     windowSpread = endWindow - startWindow
-
-                    assert windowSpread >= 0, "windowSpread < 0, check whichWhindow() implementation"
-
-                    if windowSpread == 0: # feature is fully contained in one window
+                    assert windowSpread >= 0, ("windowSpread < 0, check "
+                                                "whichWhindow() implementation")
+                    # feature is fully contained in one window: add the length
+                    # of this feature to the running total
+                    if windowSpread == 0:
                         windowFeatLens[startWindow] += (feature[1] - feature[0])
-                        assert windowFeatLens[startWindow] <= windowLen, "1: window coverage greater than window length"
-                    elif windowSpread >= 1: # feature is spread across two or more winodws
-                        windowFeatLens[startWindow] += (windows[startWindow][1] - feature[0])
-                        windowFeatLens[endWindow] += (feature[1] -  windows[endWindow][0])
-                        assert windowFeatLens[startWindow] <= windowLen, "2.start: window coverage greater than window length"
-                        assert windowFeatLens[endWindow] <= windowLen, "2.end: window coverage greater than window length"
-                        if windowSpread > 1: # feature is spread across three or more windows
+                        assert windowFeatLens[startWindow] <= windowLen, ("1: "
+                                   "window coverage greater than window length")
+                    # feature is spread across two or more winodws: add the
+                    # length of the fraction of this feature within each
+                    # window to the running totals of each window
+                    elif windowSpread >= 1:
+                        windowFeatLens[startWindow] += (windows[startWindow][1] 
+                                                        - feature[0])
+                        windowFeatLens[endWindow] += (feature[1] 
+                                                      -  windows[endWindow][0])
+                        assert windowFeatLens[startWindow] <= windowLen, ("2.start: "
+                                  "window coverage greater than window length")
+                        assert windowFeatLens[endWindow] <= windowLen, ("2.end:"
+                                 " window coverage greater than window length")
+                        # feature is spread across three or more windows:
+                        # for each internal window mark the density as 100%
+                        if windowSpread > 1:
                             for i in range(startWindow+1, endWindow):
                                 windowFeatLens[i] += windowLen
-                                assert windowFeatLens[i] <= windowLen, "3. window coverage greater than window length"
-
+                                assert windowFeatLens[i] <= windowLen, ("3. "
+                                  "window coverage greater than window length")
+                # this scaffold contains features. output Circos heatmap line
                 for i in range(len(windowFeatLens)):
                     propFeatInWindow = windowFeatLens[i]/windowLen
                     windowStart = windows[i][0]
                     windowEnd = windows[i][1]
-                    print('{0}\t{1}\t{2}\t{3:.10f}'.format(scaf, windowStart, windowEnd, propFeatInWindow))
+                    print('{0}\t{1}\t{2}\t{3:.10f}'.format(scaf, windowStart, 
+                                                  windowEnd, propFeatInWindow))
+            # this scaffold contains no features. output lines with 0 for every
+            # value in the density column
             else:
                 for i in windows:
-                    print('{0}\t{1}\t{2}\t{3:.10f}'.format(scaf, windows[i][0], windows[i][1], 0))
-
+                    print('{0}\t{1}\t{2}\t{3:.10f}'.format(scaf, windows[i][0], 
+                                                             windows[i][1], 0))
             for i in windowFeatLens:
-                assert windowFeatLens[i] <= windowLen, "4. window coverage greater than window length"
+                assert windowFeatLens[i] <= windowLen, ("4. window coverage"
+                                                 " greater than window length")
 
 
 if __name__ == '__main__':
     args = sys.argv
-
-    if '-h' in args or len(args) < 7 or ('-gff' not in args or ('-scafLens' not in args and '-fasta' not in args) or '-window' not in args):
+    # print help if command line arguments are missing
+    if ('-h' in args 
+     or len(args) < 7 
+     or ('-gff' not in args 
+        or ('-scafLens' not in args and '-fasta' not in args) 
+        or '-window' not in args)):
         help()
         sys.exit()
-
+    # read in gff file
     gff_filepath = args[args.index('-gff') +1]
+    # read in list of scaffolds to restrict output to
     if '-scafList' in args:
         scafListFl = args[args.index('-scafList') +1]
         scafList = open(scafListFl).read().strip().split('\n')
     else:
         scafList = None
+    # calculate scaffold lengths from fasta file
     if '-fasta' in args:
         fasta_filepath = args[args.index('-fasta') +1]
         scafLens = fasta2LenDct(fasta_filepath, scafList)
+    # parse file containing scaffold lengths
     elif '-scafLens' in args:
         scafLens_filepath = args[args.index('-scafLens') +1]
         scafLens = parseLenFile(scafLens_filepath)
-
+    # read the window length
     windowLen = int(args[args.index('-window') +1])
-
+    # calculate and output the Circos heatmap
     gff2circosHeatmap(gff_filepath, scafLens, windowLen, scafList)
