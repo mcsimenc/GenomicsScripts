@@ -7,3 +7,6 @@ gff2bed.py
 ### Circos scripts
 gff2circos-heatmap.py \
 gff2circos-tile.py
+
+# GFF3 scripts
+gff2fasta.py    ######Depends on BEDtools

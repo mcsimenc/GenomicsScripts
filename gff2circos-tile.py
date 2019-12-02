@@ -35,7 +35,6 @@ def help():
     Output:
     ------------
     scaf    start    stop    value
-
 ''', file=sys.stderr)
 
 

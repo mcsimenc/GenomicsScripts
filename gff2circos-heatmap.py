@@ -44,7 +44,6 @@ def help():
     Output:
     ------------
     scaf    start    stop    density
-
 """, file=sys.stderr)
 
 
@@ -112,7 +111,10 @@ def fasta2LenDct(filepath, scafList=None):
 
             
 
-def gff2circosHeatmap(filepath, scafLens, windowLen, scafList=None):
+def gff2circosHeatmap(filepath, 
+                      scafLens, 
+                      windowLen, 
+                      scafList=None):
     """1. Reads scaf, start, and start for features in GFF3 file into 
        memory
     2. Creates all windows for a given scaf
