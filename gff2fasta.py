@@ -68,18 +68,19 @@ def bedtoolsid2attr(gff_flpath,
     # to new sequence ids
     return map_dct
 
-def rename_fasta_seq_headers(in_flpath, in_header_pattern, header_to_name_map, out_flpath):
+def rename_fasta_seq_headers(in_flpath,
+                             in_header_pattern, 
+                             header_to_name_map, 
+                             out_flpath):
+    """Reads FASTA file using the Biopython function SeqIO.parse() and
+    renames the sequence header from the bedtools getfasta-style
+    to the new name obtained from the requested attribute in the GFF3.
     """
-    I/O for changing fasta sequence headers. Uses regex matching and dictionary associating current with new name.
-    in_fasta_filepath - the fasta file with headers to be renamed.
-    in_header_pattern - a regex that will match the part of the header that corresponds to keys in header_to_name_map
-    header_to_name_map - a dict with keys as part of in_fasta_filepath seq headers that match in_header_pattern and values as the abbreviated LTR-RT ID (e.g. 24_1, which corresponds to LTR_retrotransposon24)
-
-    This function depends on the re and Bio.SeqIO modules
-    """
+    # read fastas
     fasta_file = list(SeqIO.parse(in_flpath, 'fasta'))
+    # regex pattern to get the bedtools getfasta sequence name
     in_header_pattern = re.compile(in_header_pattern)
-
+    # for each sequence rename the sequence header
     for seq in fasta_file:
         seq_id = re.search(in_header_pattern, seq.id).group(1)
         seq.id = header_to_name_map[seq_id]
