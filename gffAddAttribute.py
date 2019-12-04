@@ -19,7 +19,9 @@ def help():
     -map, a map of values of the key specified by -mapKey, such as
     a list of gene names, to the value of the new attribute keys. The
     purpose of the -map file is to provide a way to map the new
-    attribute values to specific features in the input GFF3.
+    attribute values to specific features in the input GFF3. If the
+    -mapKey is not in a given original GFF3 line then the new attribute
+    key is added with a value of None.
 
     e.g.
         -mapKey ID -attr function
@@ -28,6 +30,7 @@ def help():
     ------------------------------
         ID=Gene1
         ID=Gene2
+        Name=Repeat1
 
     the file given by -map:
     ------------------------------
@@ -38,6 +41,7 @@ def help():
     ------------------------------
         ID=Gene1;function=protease
         ID=Gene2;function=intracellular_transport
+        Name=Repeat1;function=None
     
 
     Options:
@@ -128,7 +132,7 @@ class GFF3_line:
                           str(self.phase), 
                           str(self.attributes_str)])
 
-    def refreshAttrStr(self, attrOrder=None):
+    def refreshAttrStr(self):
         """If the attributes dictionary or attributes_order has been 
         altered this should be called to update attributes_str.
         """
@@ -170,13 +174,15 @@ with open(gffFilepath) as gffFl:
         else:
             # read each line into a GFF3_line object for manipulation
             gffLine = GFF3_line(line)
-            # do not process lines if they are not the type specified
-            # by the optional flag -restrictType
+            # output the original lines if they are not the type
+            # specified by the optional flag -restrictType
             if '-restrictType' in args:
                 if gffLine.type != restrictType:
                     print(line, end='')
                     continue
-            # 
+            # output the original line if the attribute key to be
+            # added is already a key in the original line. print a
+            # warning to stderr if -v is specified
             if newAttrKey in gffLine.attributes:
                 if (not '-replace' in args 
                     and ('-replaceIfNone' in args 
@@ -187,6 +193,8 @@ with open(gffFilepath) as gffFl:
                                                   newAttrKey), file=sys.stderr)
                     print(line, end='')
                     continue
+            # if the -mapKey is not in an original GFF3 line then write
+            # a new attribute key with a value of None
             try:
                 featureIdentifier = gffLine.attributes[mapKey]
             except KeyError:
@@ -194,18 +202,16 @@ with open(gffFilepath) as gffFl:
                     print('{0}\n-mapKey {1} not in above GFF3 line.'.format(
                                         str(gffLine), mapKey), file=sys.stderr)
                     print('--------', file=sys.stderr)
-                newAttrValue = "None"
+                newAttrValue = 'None'
                 gffLine.attributes[newAttrKey] = newAttrValue
                 if newAttrKey not in gffLine.attributes_order:
                     gffLine.attributes_order.append(newAttrKey)
-                try:
-                    gffLine.refreshAttrStr()
-                except:
-                    print(gffLine.attributes, file=sys.stderr)
-                    print(gffLine.attributes_order, file=sys.stderr)
-                    sys.exit()
+                gffLine.refreshAttrStr()
                 print(str(gffLine))
                 continue
+            # if the -mapKey is in an original GFF3 line and its value
+            # is in the -map, write the new attribute key and value
+            # and output the modified line
             if featureIdentifier in attrMap:
                 newAttrValue = attrMap[featureIdentifier]
                 gffLine.attributes[newAttrKey] = newAttrValue
@@ -213,6 +219,9 @@ with open(gffFilepath) as gffFl:
                     gffLine.attributes_order.append(newAttrKey)
                 gffLine.refreshAttrStr()
                 print(str(gffLine))
+            # if -mapKey is in an original GFF3 line but its value is
+            # not in the -map, add the new attribute key with a value
+            # of None and output the modified line
             else:
                 if '-v' in args:
                     print(('{0}\nNo item in -map matching {1} from the above '
@@ -220,7 +229,7 @@ with open(gffFilepath) as gffFl:
                                                            featureIdentifier), 
                                                                file=sys.stderr)
                     print('--------', file=sys.stderr)
-                newAttrValue = "None"
+                newAttrValue = 'None'
                 gffLine.attributes[newAttrKey] = newAttrValue
                 if newAttrKey not in gffLine.attributes_order:
                     gffLine.attributes_order.append(newAttrKey)
