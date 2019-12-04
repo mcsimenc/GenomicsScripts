@@ -57,7 +57,7 @@ def help():
                           and the second column to the value for the 
                           new attribute key.
 
-    -mapKey    <string>   An attribute key present in the original GFF3
+    -mapKey <string>      An attribute key present in the original GFF3
                           file, the values of which are present in the
                           first column of the file specified by -map
 
@@ -80,8 +80,10 @@ class GFF3_line:
 
     Attributes:
     ------------
-    field0, ... , field8 - string
-    attributes - dictionary
+    field0, ..., field8   strings containing the values of each field
+                          in a GFF3 line
+    attributes            a dictionary containing the key-value pairs
+                          in the GFF3 line 9th field
 
     Methods:    
     ------------
