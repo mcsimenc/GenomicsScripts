@@ -8,4 +8,5 @@ gff2bed.py
 gff2circos-heatmap.py \
 gff2circos-tile.py \
 gff2fasta.py \
-gffAddAttribute.py
+gffAddAttribute.py \
+gffFilter.py
