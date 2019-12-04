@@ -71,7 +71,9 @@ def help():
 
 
 class GFF3_line:
-    """
+    """A class to represet GFF3 lines and allow modification of the
+    values of its fields.
+
     Attributes:
     ------------
     field0, ... , field8 - string
@@ -79,10 +81,10 @@ class GFF3_line:
 
     Methods:    
     ------------
-    str()               Prints GFF3 line.
+    str()               Outputs GFF3 line
+    repr()              Outputs GFF3 line
     refreshAttrStr()    This needs to be called if changes were made to
                         any of the attributes. It refreshes
-
     """
 
     def __init__(self, line):
@@ -135,9 +137,15 @@ class GFF3_line:
 
 
 # print help information if not eanough arguments are present
-args =sys.argv
-if len(sys.argv) < 9 or '-h' in args:
+args = sys.argv
+if (len(sys.argv) < 9 
+    or '-h' in args
+    or '-attr' not in args
+    or '-gff' not in args
+    or '-map' not in args
+    or '-mapKey' not in args):
     help()
+# read the file provided by -map into a dictionary
 attrMap = {}
 with open(sys.argv[sys.argv.index('-map') + 1]) as mapFl:
     for line in mapFl:
@@ -146,21 +154,29 @@ with open(sys.argv[sys.argv.index('-map') + 1]) as mapFl:
             attrMap[gene] = annot
         except:
             continue
+# read other command line flags
 mapKey = sys.argv[sys.argv.index('-mapKey')+1]
 newAttrKey = sys.argv[sys.argv.index('-attr')+1]
 gffFilepath = sys.argv[sys.argv.index('-gff')+1]
 if '-restrictType' in args:
     restrictType = sys.argv[sys.argv.index('-restrictType')+1]
+# read gff file and for each line, add the specified attribute and
+# print the line
 with open(gffFilepath) as gffFl:
     for line in gffFl:
+        # output commented lines as they are
         if line.startswith('#'):
             print(line, end='')
         else:
+            # read each line into a GFF3_line object for manipulation
             gffLine = GFF3_line(line)
+            # do not process lines if they are not the type specified
+            # by the optional flag -restrictType
             if '-restrictType' in args:
                 if gffLine.type != restrictType:
                     print(line, end='')
                     continue
+            # 
             if newAttrKey in gffLine.attributes:
                 if (not '-replace' in args 
                     and ('-replaceIfNone' in args 
