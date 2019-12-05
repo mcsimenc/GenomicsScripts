@@ -1,5 +1,7 @@
 # Genomics scripts
-Python scripts for manipulating various genomics-related file formats.
+Python scripts for manipulating various genomics-related file formats. \
+Some definitions are included in multiple files so they are as standalone
+as possible.
 
 ### BED format scripts
 gff2bed.py
