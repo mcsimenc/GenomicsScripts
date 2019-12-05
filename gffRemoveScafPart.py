@@ -16,9 +16,7 @@ def help():
     Options:
     ------------
     -scaf  <string>     Scaffold name from which to remove features
-
     -range <int-int>    Range to remove, e.g. -range 452-1823
-
     -h                  Output help information
     ''')
     sys.exit(0)
