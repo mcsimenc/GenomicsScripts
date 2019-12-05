@@ -9,4 +9,5 @@ gff2circos-heatmap.py \
 gff2circos-tile.py \
 gff2fasta.py \
 gffAddAttribute.py \
-gffFilter.py
+gffFilter.py \
+gffRemoveScafPart.py
