@@ -24,23 +24,16 @@ def help():
     merged and feature strand is not taken into account. Features are
     all treated as if they are on a single strand.
 
-
     Required parameters:
     ------------
     -gff          <path>    Path to input maker gff3 file (mandatory)
-
     -scafLens     <path>    Scaffold lengths. 2-column, (1) scaf name 
                             and (2) scaffold lengths
-
     -fasta        <path>    FASTA file corresponding to the seq names 
                             in the -gff Alternative to using -scafLens
-
     -window       <int>     The number of bases in the sliding window 
-    
     -scafList     <path>    Restrict output to these scaffolds. A file
                             with a list of scaffold names
-
-
     Output:
     ------------
     scaf    start    stop    density
