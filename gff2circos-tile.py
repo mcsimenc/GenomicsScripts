@@ -23,7 +23,6 @@ def help():
     Required parameters:
     ------------
     -gff          <path>    Path to input maker gff3 file (mandatory).
-
     -valueDef     <path>    Tab-delimited file where first column is a 
                             string to search for in each GFF3 line and 
                             the second column is the value to assign if 
@@ -31,7 +30,7 @@ def help():
                             to contain numbers only. e.g: exon  1
                                                           gene  2
                                                           intron    3
-
+                                                          
     Output:
     ------------
     scaf    start    stop    value
