@@ -12,4 +12,5 @@ gff2circos-tile.py \
 gff2fasta.py \
 gffAddAttribute.py \
 gffFilter.py \
-gffRemoveScafPart.py
+gffRemoveScafPart.py \
+gffMergeOverlaps.py
