@@ -13,4 +13,5 @@ gff2fasta.py \
 gffAddAttribute.py \
 gffFilter.py \
 gffRemoveScafPart.py \
-gffMergeOverlaps.py
+gffMergeOverlaps.py \
+gff2introns.py
