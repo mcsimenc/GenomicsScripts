@@ -7,7 +7,6 @@ as possible.
 ### GFF3 scripts
 `gffAddAttribute.py` - - - - add a key-value pair to the attributes column of a GFF3 file \
 \
-\
 `gff2bed.py` - - - - - - - - convert a GFF3 file to a BED format file \
 \
 `gff2circosHeatmap.py` - - - convert feature coordinates in a GFF3 file to Circos heatmap track format with specified bin size \
