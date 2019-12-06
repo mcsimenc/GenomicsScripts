@@ -3,7 +3,7 @@ Python scripts for manipulating various genomics-related file formats. \
 Some definitions are included in multiple scripts so they are as standalone
 as possible.
 
-__gffAddAttribute.py__: add a key-value pair to the attributes column of a GFF3 file \
+`gffAddAttribute.py`: add a key-value pair to the attributes column of a GFF3 file \
 \
 `gff2bed.py`: convert a GFF3 file to a BED format file \
 \
@@ -22,4 +22,3 @@ __gffAddAttribute.py__: add a key-value pair to the attributes column of a GFF3 
 `gffRemoveScafPart.py`: remove features in a GFF3 file whose coordinates \
 \
 `gffRenameScafs.py` \
-\
