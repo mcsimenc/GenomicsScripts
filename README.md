@@ -13,3 +13,5 @@ as possible.
 * `gffMergeOverlaps.py`: merge overlapping features in a GFF3 file
 * `gffRemoveScafPart.py`: remove features in a GFF3 file whose coordinates
 * `gffRenameScafs.py`: rename scaffolds in a GFF3 file per a two-column map
+
+* `extractFastaSeqs.py`: extract a subset of the sequences in a FASTA file
