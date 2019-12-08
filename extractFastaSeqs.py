@@ -5,20 +5,20 @@ import sys
 
 def help():
     print('''
-        Usage:
-        ------------
-        extract_fasta_seqs.py [fasta_file] [out_file] [options]
+    Usage:
+    ------------
+    extract_fasta_seqs.py [fasta_file] [out_file] [options]
 
-        Description:
-        ------------
-        Outputs a file [out_file] in FASTA format containing the 
-        sequences derived from [fasta_file] whose sequence headers
-        correspond to the names given by -seq_list.
+    Description:
+    ------------
+    Outputs a file [out_file] in FASTA format containing the 
+    sequences derived from [fasta_file] whose sequence headers
+    correspond to the names given by -seq_list.
 
-        Options:
-        ------------
-        -seq_list    List of sequence identifiers
-        -v           Invert: select all except sequences in -seq_list
+    Options:
+    ------------
+    -seq_list    List of sequence identifiers
+    -v           Invert: select all except sequences in -seq_list
         ''')
     sys.exit(0)
 
