@@ -18,3 +18,4 @@ as possible.
 ### FASTA scripts
 * `extractFastaSeqs.py`: extract a subset of the sequences in a FASTA file
 * `gff2fasta.py`: extract sequences from a FASTA file based on coordinates in a GFF3 file, using the value from a specified key in the GFF3 attributes column
+
