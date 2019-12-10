@@ -3,6 +3,19 @@ Python scripts for manipulating various genomics-related file formats. \
 Some definitions are included in multiple scripts so they are as standalone
 as possible.
 
+### BED scripts
+* `bedIntersect2percentOverlap.py`: output proportion of features participating in an overlap as found by bedtools bedIntersect -wa -wb
+* `gff2bed.py`: convert a GFF3 file to a BED format file
+
+### BLAST scripts
+* `blast2gff`: convert blastn, blastp, etc. tabular output to GFF3 format
+* `blastBestHit.py`: outputs the highest-scoring hit from blastn, blastp, etc. tabular output (-outfmt 6 or 7)
+* `blastFilter.py`: outputs lines where the percent identity satisfies constraints from blastn, blastp, etc. tabular output (-outfmt 6 or 7)
+
+### FASTA scripts
+* `extractFastaSeqs.py`: extract a subset of the sequences in a FASTA file
+* `gff2fasta.py`: extract sequences from a FASTA file based on coordinates in a GFF3 file, using the value from a specified key in the GFF3 attributes column
+
 ### GFF scripts
 * `blast2gff`: convert blastn, blastp, etc. tabular output to GFF3 format
 * `gff2bed.py`: convert a GFF3 file to a BED format file
@@ -15,12 +28,3 @@ as possible.
 * `gffMergeOverlaps.py`: merge overlapping features in a GFF3 file
 * `gffRemoveScafPart.py`: remove features in a GFF3 file whose coordinates
 * `gffRenameScafs.py`: rename scaffolds in a GFF3 file per a two-column map
-
-### FASTA scripts
-* `extractFastaSeqs.py`: extract a subset of the sequences in a FASTA file
-* `gff2fasta.py`: extract sequences from a FASTA file based on coordinates in a GFF3 file, using the value from a specified key in the GFF3 attributes column
-
-### BLAST scripts
-* `blast2gff`: convert blastn, blastp, etc. tabular output to GFF3 format
-* `blastBestHit.py`: outputs the highest-scoring hit from blastn, blastp, etc. tabular output (-outfmt 6 or 7)
-* `blastFilter.py`: outputs lines where the percent identity satisfies constraints from blastn, blastp, etc. tabular output (-outfmt 6 or 7)
