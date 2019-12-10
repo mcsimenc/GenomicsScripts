@@ -12,6 +12,11 @@ as possible.
 * `blastBestHit.py`: outputs the highest-scoring hit from blastn, blastp, etc. tabular output (-outfmt 6 or 7)
 * `blastFilter.py`: outputs lines where the percent identity satisfies constraints from blastn, blastp, etc. tabular output (-outfmt 6 or 7)
 
+### Circos scripts
+* `coverage2circosLine.py`: calculate average depth of coverage form the output of bedtools genomecov -ibam <bam> -d and output a Circos line track
+* `gff2circosHeatmap.py`: convert feature coordinates in a GFF3 file to Circos heatmap track format with specified bin size
+* `gff2circosTile.py`: convert features in a GFF3 file to Circos tile track format
+
 ### FASTA scripts
 * `extractFastaSeqs.py`: extract a subset of the sequences in a FASTA file
 * `gff2fasta.py`: extract sequences from a FASTA file based on coordinates in a GFF3 file, using the value from a specified key in the GFF3 attributes column
