@@ -34,3 +34,6 @@ as possible.
 * `gffRemoveScafPart.py`: remove features in a GFF3 file whose coordinates
 * `gffRenameScafs.py`: rename scaffolds in a GFF3 file per a two-column map
 * `gffv2Exonerate2gff3.py`: convert an Exonerate-generated GFF2 file to GFF3 format
+
+### VCF scripts
+* `vcfSNPrate2circosLine.py.untested`: takes a VCF file with or without a GFF3 file whose features (genes) coordinates are represented in the VCF file and outputs SNPs rate per gene or a Circos heatmap track of SNP rate/bin size
