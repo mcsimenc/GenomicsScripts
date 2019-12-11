@@ -33,3 +33,4 @@ as possible.
 * `gffMergeOverlaps.py`: merge overlapping features in a GFF3 file
 * `gffRemoveScafPart.py`: remove features in a GFF3 file whose coordinates
 * `gffRenameScafs.py`: rename scaffolds in a GFF3 file per a two-column map
+* `gffv2Exonerate2gff3.py`: convert an Exonerate-generated GFF2 file to GFF3 format
