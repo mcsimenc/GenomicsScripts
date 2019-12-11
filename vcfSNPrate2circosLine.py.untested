@@ -9,7 +9,6 @@ def help():
         vcf2track.py -vcf <file> [-ref <file> -binsize <int>]
    
     description:
-       
        If -ref is not used, output is a Circos line track of SNP rate
        Then scaffold lengths are obtained from the vcf and used to
        calculate SNP rate. e.g. if the VCF represents mapped
