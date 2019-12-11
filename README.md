@@ -21,3 +21,4 @@ as possible.
 
 ### BLAST scripts
 * `blastBestHit.py`: outputs the highest-scoring hit from a blastn, blastp, etc. output type 6 or 7 (blast flag -outfmt)
+* `blastFilter.py`: outputs lines where the percent identity satisfies constraints. Takes blastn, blastp, etc. output using -outfmt 6 or 7
