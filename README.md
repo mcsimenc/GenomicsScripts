@@ -14,12 +14,15 @@ as possible.
 
 ### Circos scripts
 * `coverage2circosLine.py`: calculate average depth of coverage form the output of bedtools genomecov -ibam <bam> -d and output a Circos line track
+* `extractFastaSeqs.py`: extract a subset of the sequences in a FASTA file
 * `fasta2GCcontentCircosHeatmap.py`: calculate GC content for each window in each sequence in a FASTA file and output a Circos heatmap track
+* `fixTrackLabels.py`: replace labels in Circos track file with the integer label from the associated Circos karyotype file
 * `gff2circosHeatmap.py`: convert feature coordinates in a GFF3 file to Circos heatmap track format with specified bin size
 * `gff2circosTile.py`: convert features in a GFF3 file to Circos tile track format
 
 ### FASTA scripts
 * `extractFastaSeqs.py`: extract a subset of the sequences in a FASTA file
+* `fasta2circosKaryotype`: output sequence lengths as a Circos karyotype file
 * `fasta2GCcontentCircosHeatmap.py`: calculate GC content for each window in each sequence in a FASTA file and output a Circos heatmap track
 * `gff2fasta.py`: extract sequences from a FASTA file based on coordinates in a GFF3 file, using the value from a specified key in the GFF3 attributes column
 
