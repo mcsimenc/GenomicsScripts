@@ -14,7 +14,6 @@ as possible.
 
 ### Circos scripts
 * `coverage2circosLine.py`: calculate average depth of coverage form the output of bedtools genomecov -ibam <bam> -d and output a Circos line track
-* `extractFastaSeqs.py`: extract a subset of the sequences in a FASTA file
 * `fasta2GCcontentCircosHeatmap.py`: calculate GC content for each window in each sequence in a FASTA file and output a Circos heatmap track
 * `fixTrackLabels.py`: replace labels in Circos track file with the integer label from the associated Circos karyotype file
 * `gff2circosHeatmap.py`: convert feature coordinates in a GFF3 file to Circos heatmap track format with specified bin size
