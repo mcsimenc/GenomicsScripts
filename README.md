@@ -19,9 +19,11 @@ as possible.
 * `fixTrackLabels.py`: replace labels in Circos track file with the integer label from the associated Circos karyotype file
 * `gff2circosHeatmap.py`: convert feature coordinates in a GFF3 file to Circos heatmap track format with specified bin size
 * `gff2circosTile.py`: convert features in a GFF3 file to Circos tile track format
+* `vcfSNPrate2circosLine.py.untested`: takes a VCF file with or without a GFF3 file whose features (genes) coordinates are represented in the VCF file and outputs SNPs rate per gene or a Circos heatmap track of SNP rate/bin size
 
 ### FASTA scripts
-* `extractFastaSeqs.py`: extract a subset of the sequences in a FASTA file
+* `fastaExtractSeqs.py`: extract a subset of the sequences in a FASTA file
+* `fastaExtractNseqs.py`: extract the first or second or third etc.  n sequences from a FASTA file
 * `fasta2circosKaryotype`: output sequence lengths as a Circos karyotype file
 * `fasta2GCcontentCircosHeatmap.py`: calculate GC content for each window in each sequence in a FASTA file and output a Circos heatmap track
 * `gff2fasta.py`: extract sequences from a FASTA file based on coordinates in a GFF3 file, using the value from a specified key in the GFF3 attributes column
