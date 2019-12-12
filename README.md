@@ -9,8 +9,8 @@ as possible.
 
 ### BLAST scripts
 * `blast2gff`: convert blastn, blastp, etc. tabular output to GFF3 format
-* `blastBestHit.py`: outputs the highest-scoring hit from blastn, blastp, etc. tabular output (-outfmt 6 or 7)
-* `blastFilter.py`: outputs lines where the percent identity satisfies constraints from blastn, blastp, etc. tabular output (-outfmt 6 or 7)
+* `blastBestHit.py`: output the highest-scoring hit from blastn, blastp, etc. tabular output (-outfmt 6 or 7)
+* `blastFilter.py`: output lines from blastn, blastp, etc. tabular output (-outfmt 6 or 7) where the percent identity satisfies constraints
 
 ### Circos scripts
 * `coverage2circosLine.py`: calculate average depth of coverage form the output of bedtools genomecov -ibam <bam> -d and output a Circos line track
