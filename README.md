@@ -28,6 +28,7 @@ as possible.
 * `fastaExtractNseqs.py`: extract the first or second or third etc.  n sequences from a FASTA file
 * `fastaRenameSeqs.py`: rename FASTA sequence headers according to a mapping of old to new names
 * `fastaRenameSeqsByLength.py`: sort FASTA sequences in descending order and rename sequences sequentially
+* `fastaSplitSeqs.py`: write a new FASTA file for each sequence in a FASTA file
 * `gff2fasta.py`: extract sequences from a FASTA file based on coordinates in a GFF3 file, using the value from a specified key in the GFF3 attributes column
 
 ### GFF scripts
