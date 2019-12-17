@@ -46,3 +46,6 @@ as possible.
 
 ### VCF scripts
 * `vcfSNPrate2circosLine.py.untested`: takes a VCF file with or without a GFF3 file whose features (genes) coordinates are represented in the VCF file and outputs SNPs rate per gene or a Circos heatmap track of SNP rate/bin size
+
+### Other scripts
+* `repeatMaskerGFFsummarize`: writes tables with summarized counts and lengths of features in a RepeatMasker-derived GFF3
