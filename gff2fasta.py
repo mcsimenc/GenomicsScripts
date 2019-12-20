@@ -34,7 +34,7 @@ def help():
 
 def bedtoolsid2attr(gff_flpath, 
                     attr='ID', 
-                    strand=False, 
+                    use_strand=True, 
                     lstrip=None):
     """Creates a map of bedtools getfasta-stype sequence names to new
     sequence names obtained from the specified attribute from the GFF3
@@ -55,7 +55,7 @@ def bedtoolsid2attr(gff_flpath,
                 # remove characters from the left side of the string
                 if not lstrip == None:
                     attr_value = attr_value.lstrip(lstrip)
-                if strand:
+                if use_strand:
                     # the bedtools getfasta output sequence names are 
                     # different if -s is used (strand-aware extraction)
                     map_dct['{0}:{1}-{2}({3})'.format(seqid, start, end, 
@@ -69,7 +69,6 @@ def bedtoolsid2attr(gff_flpath,
     return map_dct
 
 def rename_fasta_seq_headers(in_flpath,
-                             in_header_pattern, 
                              header_to_name_map, 
                              out_flpath):
     """Reads FASTA file using the Biopython function SeqIO.parse() and
@@ -78,12 +77,9 @@ def rename_fasta_seq_headers(in_flpath,
     """
     # read fastas
     fasta_file = list(SeqIO.parse(in_flpath, 'fasta'))
-    # regex pattern to get the bedtools getfasta sequence name
-    in_header_pattern = re.compile(in_header_pattern)
     # for each sequence rename the sequence header
     for seq in fasta_file:
-        seq_id = re.search(in_header_pattern, seq.id).group(1)
-        seq.id = header_to_name_map[seq_id]
+        seq.id = header_to_name_map[seq.id]
         seq.description = ''
     
     SeqIO.write(fasta_file, out_flpath, 'fasta')
@@ -142,9 +138,7 @@ def ChangeFastaHeaders(inputFastaPath, inputGFFpath, attribute='ID'):
     bedtoolsIDmap = bedtoolsid2attr(inputGFFpath, attr=attribute)
     # write fasta with new sequence headers obtained fro the map
     newFasta = '{0}.new.tmp'.format(inputFastaPath)
-    header_pattern='(.+?:\d+?-\d+?)(?:$|\D)'
-    rename_fasta_seq_headers(inputFastaPath, header_pattern, bedtoolsIDmap, 
-                                                                      newFasta)
+    rename_fasta_seq_headers(inputFastaPath, bedtoolsIDmap, newFasta)
     os.replace(newFasta, inputFastaPath)
 
 
