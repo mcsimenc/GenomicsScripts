@@ -37,6 +37,7 @@ as possible.
 * `gff2circosTile.py`: convert features in a GFF3 file to Circos tile track format
 * `gff2fasta.py`: extract sequences from a FASTA file based on coordinates in a GFF3 file using the value from a specified key in the GFF3 attributes column as the sequence name. Depends on BEDTools and BioPython
 * `gff2introns.py`: create a GFF3 with intron features from a GFF3 with gene and exon features or output a list of intron lengths
+* `gff3line.py`: contains the GFF3\_class
 * `gffAddAttribute.py`: add a key-value pair to the attributes column of a GFF3 file
 * `gffFilter.py`: remove or retain GFF3 features on specified scaffolds or with specified values for the ID attribute
 * `gffMergeOverlaps.py`: merge overlapping features in a GFF3 file
@@ -48,4 +49,6 @@ as possible.
 * `vcfSNPrate2circosLine.py.untested`: takes a VCF file with or without a GFF3 file whose features (genes) coordinates are represented in the VCF file and outputs SNPs rate per gene or a Circos heatmap track of SNP rate/bin size
 
 ### Other scripts
+* `meanMedianMinMax.py`: takes input of a list of numbers and outputs the mean, median, minimum value, maximum value, and sum total
+* `repeatMaskerGFFsubset`: takes input of RepeatMasker GFF and writes lines from several categories each into their own file
 * `repeatMaskerGFFsummarize`: writes tables with summarized counts and lengths of features in a RepeatMasker-derived GFF3
