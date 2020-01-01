@@ -21,7 +21,7 @@ as possible.
 * `vcfSNPrate2circosLine.py.untested`: takes a VCF file with or without a GFF3 file whose features (genes) coordinates are represented in the VCF file and outputs SNPs rate per gene or a Circos heatmap track of SNP rate/bin size
 
 ### FASTA scripts
-* `fasta2circosKaryotype`: output sequence lengths as a Circos karyotype file
+* `fasta2circosIdeograms`: output sequence lengths as a Circos ideogram file
 * `fasta2GCcontentCircosHeatmap.py`: calculate GC content for each window in each sequence in a FASTA file and output a Circos heatmap track
 * `fastaExtractSeqs.py`: extract a subset of the sequences in a FASTA file
 * `fastaExtractNseqs.py`: extract the first or second or third etc.  n sequences from a FASTA file

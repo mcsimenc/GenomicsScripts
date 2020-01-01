@@ -7,7 +7,7 @@ def help():
     print("""
     Usage:
     ------------
-    gff2circos-heatmap.py -gff <path> -window <int> 
+    gff2circosHeatmap.py -gff <path> -window <int> 
         [<path> -scafLens | -fasta <path>] [-scafList <path>]
 
     Description:
