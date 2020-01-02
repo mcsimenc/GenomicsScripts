@@ -44,6 +44,7 @@ as possible.
 * `gffRemoveScafPart.py`: remove features in a GFF3 file whose coordinates
 * `gffRenameScafs.py`: rename scaffolds in a GFF3 file per a two-column map
 * `gffSubset.py`: extracts a subset of a GFF3 file based on values of a chosen attribute key
+* `gffSubsetLTRdigest.py`: extracts feature blocks from a LTRharvest/LTRdigest GFF3
 * `gffv2Exonerate2gff3.py`: convert an Exonerate-generated GFF2 file to GFF3 format
 
 ### VCF scripts
